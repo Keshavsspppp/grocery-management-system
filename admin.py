@@ -4,13 +4,13 @@ def get_inventory():
     data = database.load_data()
     return data.get("prod", {})
 
-def add_prod(item, price, qty):
+def add_prod(item, price, qty, category="Other"):
     data = database.load_data()
     item = item.lower()
     if "prod" not in data:
         data["prod"] = {}
     if item not in data["prod"]:
-        data["prod"][item] = [price, qty]
+        data["prod"][item] = [price, qty, category]
         database.save_data(data)
         return True, "Item added successfully!"
     return False, "Item already exists"

@@ -19,7 +19,8 @@ def get_products():
 @app.route('/api/products', methods=['POST'])
 def add_product():
     data = request.json
-    success, msg = admin.add_prod(data['item'], data['price'], data['qty'])
+    category = data.get('category', 'Other')
+    success, msg = admin.add_prod(data['item'], data['price'], data['qty'], category)
     return jsonify({"success": success, "message": msg})
 
 @app.route('/api/products/<item>/price', methods=['PUT'])
