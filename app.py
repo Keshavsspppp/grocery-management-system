@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import admin
 import customer
+import database
 
 app = Flask(__name__)
 CORS(app)
@@ -61,9 +62,20 @@ def update_cart_qty(item):
     return jsonify({"success": success, "message": msg})
 
 @app.route('/api/cart/<item>', methods=['DELETE'])
-def delete_from_cart(item):
+def remove_from_cart(item):
     success, msg = customer.delete_item(item)
     return jsonify({"success": success, "message": msg})
+
+@app.route('/api/checkout', methods=['POST'])
+def checkout():
+    success, msg = customer.checkout()
+    return jsonify({"success": success, "message": msg})
+
+@app.route('/api/orders', methods=['GET'])
+def get_orders():
+    data = database.load_data()
+    orders = data.get("orders", [])
+    return jsonify(orders)
 
 if __name__ == '__main__':
     app.run(debug=True)
